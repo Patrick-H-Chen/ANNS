@@ -76,7 +76,7 @@ void run_dense(std::string data_dir , char* model_path, index_type M, index_type
 
     double latency = std::numeric_limits<double>::max();
     // REPEAT 10 times and report the best result
-    for (int repeat = 0; repeat < 1; repeat++) {
+    for (int repeat = 0; repeat < 10; repeat++) {
         double inner_latency = 0.0;
         for (index_type idx = 0; idx < num_data; idx++) {
             StopW stopw = StopW();

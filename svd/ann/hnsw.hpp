@@ -37,7 +37,6 @@
 #include "utils/type_util.hpp"
 
 int num_rerank;
-int sub_dimension;
 using pecos::ann::index_type;
 
 std::string scheme;
@@ -537,7 +536,6 @@ namespace ann {
                 topk_queue.clear();
                 cand_queue.clear();
             }
-
 
             max_heap_t& search_level(const feat_vec_t& query, index_type init_node, index_type efS, index_type level) {
                 return hnsw->search_level(query, init_node, efS, level, *this);
@@ -1125,7 +1123,12 @@ namespace ann {
             }
 
             max_heap_t& search_mix(const feat_vec_t& query, index_type init_node, index_type efS, index_type level) {
-                return hnsw->search_mix(query, init_node, efS, level, *this);
+                if (save_per_edge) {
+                    return hnsw->search_mix_per_edge(query, init_node, efS, level, *this);
+                }
+                else {
+                    return hnsw->search_mix(query, init_node, efS, level, *this);
+                }
             }
 
             max_heap_t& search_finger(const feat_vec_t& query, index_type init_node, index_type efS, index_type level) {
@@ -1634,6 +1637,7 @@ namespace ann {
         ) const  {
             const auto *G0Q = &graph_svd;
             std::vector<float> appx_dist;
+            appx_dist.resize(graph_svd.max_degree);
             size_t node_mem_size = sizeof(index_type) + sizeof(float) * low_rank;
             searcher.reset();
             searcher.setup_lut(query.val);
