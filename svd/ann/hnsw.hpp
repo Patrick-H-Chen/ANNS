@@ -37,7 +37,6 @@
 #include "utils/type_util.hpp"
 
 int num_rerank;
-int sub_dimension;
 using pecos::ann::index_type;
 
 std::string scheme;
@@ -537,7 +536,6 @@ namespace ann {
                 topk_queue.clear();
                 cand_queue.clear();
             }
-
 
             max_heap_t& search_level(const feat_vec_t& query, index_type init_node, index_type efS, index_type level) {
                 return hnsw->search_level(query, init_node, efS, level, *this);
